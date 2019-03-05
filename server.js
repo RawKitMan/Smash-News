@@ -1,13 +1,11 @@
 //Access all the necessary packages to make this scraping and mongoosing work
 var express = require("express");
 var mongoose = require("mongoose");
-var axios = require("axios");
-var cheerio = require("cheerio");
 
 //Logs the requests made
 var logger = require("morgan");
 
-
+var app = express();
 //Need our models for Mongoose
 var db = require("./models");
 
@@ -26,14 +24,15 @@ app.use(express.static("public"));
 var PORT = 3000;
 
 //Set up Express
-var app = express();
 
 //Sets server to pull up Handlebar pages.
 let expresshb = require("express-handlebars");
 app.engine("handlebars", expresshb({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-require("./routes/api-routes")(app);
+var routes = require("./routes/api-routes");
+
+app.use(routes);
 
 //Mongoose connection for Heroku
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
