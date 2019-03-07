@@ -18,8 +18,13 @@ var ArticleSchema = new Schema({
     required: true,
     unique: true
   },
+  summary: {
+    type: String,
+    required: true,
+    unique: true
+  },
   //Stores the note's ObjectId for the associated article.
-  notes: {
+  note: {
     type: Schema.Types.ObjectId,
     ref: "Note"
   }

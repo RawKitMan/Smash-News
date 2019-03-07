@@ -1,0 +1,14 @@
+<div id="articles">
+    {{#each dbArticles}}
+    <div class="mt-5">
+        <p id={{_id}}>{{title}}</p>
+        <p>{{summary}}</p>
+        <a href={{article_url}} target="_blank">Link</a>
+        <button  id = "note-btn" data-id = {{_id}} type="button" class="btn btn-primary btn-lg">Add Note</button>
+    </div>
+    {{/each}}
+</div>
+
+
+
+
