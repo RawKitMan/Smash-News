@@ -9,19 +9,8 @@ router.get('/', function (req, res, next) {
   db.Article.find(function (err, content) {
     console.log(content);
     res.render('index', { title: 'Smash News', dbArticles: content });
-  });
-});
 
-router.get("/articles", function(req, res){
-  db.Article.find({})
-  .then(function(dbArticles){
-    res.json(dbArticles);
-  })
-  .catch(function(err){
-    if(err){
-      res.json(err);
-    }
-  })
+  });
 });
 
 router.get("/scrape", function (req, res) {
@@ -89,12 +78,12 @@ router.post("/articles/:id", function (req, res) {
       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
       return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true })
-      .then(function(){
-        console.log("Note saved");
-      })
-      .catch(function(err){
-        res.json(err);
-      });
+        .then(function () {
+          console.log("Note saved");
+        })
+        .catch(function (err) {
+          res.json(err);
+        });
     })
     .then(function (dbArticle) {
       // If we were able to successfully update an Article, send it back to the client
@@ -106,48 +95,51 @@ router.post("/articles/:id", function (req, res) {
     });
 });
 
-router.put("/articles/:id", function(req, res){
+router.put("/articles/:id", function (req, res) {
   db.Article.findOneAndUpdate({
     _id: req.params.id
   },
-  {
-    saved: req.body.saved
-  },
-  {
-    new: true
-  })
-  .then(function(){
-    console.log("Update Complete")
-  })
+    {
+      saved: req.body.saved
+    },
+    {
+      new: true
+    })
+    .then(function () {
+      console.log("Update Complete")
+    })
 });
 
 router.put("/note/:id", function (req, res) {
-  db.Note.findOneAndUpdate({ 
-    _id: req.params.id 
-  }, 
-    { 
-      title: req.body.title, 
-      body: req.body.body 
-    }, 
-    { 
-      new: true 
+  db.Note.findOneAndUpdate({
+    _id: req.params.id
+  },
+    {
+      title: req.body.title,
+      body: req.body.body
+    },
+    {
+      new: true
     })
-    .then(function(){
+    .then(function () {
       console.log("Update Complete");
     })
 });
 
-router.delete("/articles/:id", function(req, res){
-  
-  db.Article.find({
+router.delete("/articles/:id", function (req, res) {
+
+  db.Article.findOne({
     _id: req.params.id
   })
-  .then(function(dbArticle){
-    let noteId = dbArticle.note;
-    db.Article.drop({_id: req.params.id});
-    db.Note.drop({_id: noteId});
-    console.log("Deleted");
-  })
-})
+    .then(function (dbArticle) {
+      console.log(dbArticle);
+      if (dbArticle.note) {
+        let noteId = dbArticle.note;
+        console.log(noteId);
+        db.Note.findByIdAndDelete(noteId);
+      }
+      db.Article.findByIdAndDelete(req.params.id);
+    });
+  });
 //Export to the server.
 module.exports = router;

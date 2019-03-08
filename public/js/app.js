@@ -1,5 +1,5 @@
 $(function () {
-    
+
     //Pull up any saved articles when the page
 
     $("#scrape").on("click", function () {
@@ -17,19 +17,16 @@ $(function () {
             });
     });
 
-    $("#remove-unsaved").on("click", function(){
+    $(document).on("click", "#remove-unsaved", function () {
 
+        console.log($(this).attr("data-id"));
         $.ajax({
-            method: "GET",
-            url: "/articles"
+            method: "DELETE",
+            url: "/articles/" + $(this).attr("data-id"),
+        }).then(function () {
+            console.log("Delete complete");
         })
-        .then(function(data){
-            console.log(data);
 
-            let unsavedArr = data.map(function)
-            
-            
-        })
     });
 
     //
@@ -43,6 +40,18 @@ $(function () {
         }).then(function () {
             console.log("Update Complete")
         })
+    });
+
+    $(document).on("click", "#unsave-btn", function () {
+        $.ajax({
+            method: "PUT",
+            url: "/articles/" + $(this).attr("data-id"),
+            data: {
+                saved: false
+            }
+        }).then(function () {
+            console.log("Update Complete")
+        });
     });
 
     //When the button is clicked on a article to Add a Note, an area will appear where a note can be applied to the specific article
