@@ -1,15 +1,50 @@
 $(function () {
+    
+    //Pull up any saved articles when the page
 
-    $("#scrape").on("click", function(){
+    $("#scrape").on("click", function () {
         $.ajax({
             method: "GET",
             url: "/scrape"
         })
-        .then(function(data){
-            console.log("Scrape Complete");
-            window.location = "/";
-        });
+            .then(function (data) {
+                if (data) {
+                    console.log("Scrape Complete");
+                }
+                else {
+                    console.log("No articles found");
+                }
+            });
     });
+
+    $("#remove-unsaved").on("click", function(){
+
+        $.ajax({
+            method: "GET",
+            url: "/articles"
+        })
+        .then(function(data){
+            console.log(data);
+
+            let unsavedArr = data.map(function)
+            
+            
+        })
+    });
+
+    //
+    $(document).on("click", "#save-btn", function () {
+        $.ajax({
+            method: "PUT",
+            url: "/articles/" + $(this).attr("data-id"),
+            data: {
+                saved: true
+            }
+        }).then(function () {
+            console.log("Update Complete")
+        })
+    });
+
     //When the button is clicked on a article to Add a Note, an area will appear where a note can be applied to the specific article
     $(document).on("click", "#note-btn", function () {
 
@@ -27,21 +62,25 @@ $(function () {
                 // A textarea to add a new note body
                 $("#notes").append("<textarea id='body' name='body'></textarea>");
                 // A button to submit a new note, with the id of the article saved to it
-                $("#notes").append("<button data-id='" + data._id + "' id='enter-note'>Submit Note</button>");
 
                 // If there's a note in the article
                 if (data.note) {
+                    //If a note exists already, we want to update, not post a new note
+                    $("#notes").append("<button data-id='" + data.note._id + "' id='update-note'>Update</button>");
                     // Place the title of the note in the title input
                     $("#title").val(data.note.title);
                     // Place the body of the note in the body textarea
                     $("#body").val(data.note.body);
                 }
+                else {
+                    $("#notes").append("<button data-id='" + data._id + "' id='enter-note'>Submit Note</button>");
+                }
             }
         });
     });
 
-    $(document).on("click", "#enter-note", function(){
-        
+    $(document).on("click", "#enter-note", function () {
+
         $.ajax({
             method: "POST",
             url: "/articles/" + $(this).attr("data-id"),
@@ -50,12 +89,33 @@ $(function () {
                 body: $("#body").val().trim()
             }
         })
-        .then(function(data){
-            console.log(data);
-            $("#notes").empty();
-        })
+            .then(function (data) {
+                console.log(data);
+                $("#notes").empty();
+            })
 
         $("#title").val("");
-        $("#body").val();
+        $("#body").val("");
     });
+
+    //Updating the note that's already stored
+    $(document).on("click", "#update-note", function () {
+
+        $.ajax({
+            method: "PUT",
+            url: "/note/" + $(this).attr("data-id"),
+            data: {
+                title: $("#title").val().trim(),
+                body: $("#body").val().trim()
+            }
+        })
+            .then(function (data) {
+                console.log(data);
+                $("#notes").empty();
+            })
+
+        $("#title").val("");
+        $("#body").val("");
+    });
+
 });
