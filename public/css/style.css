@@ -1,0 +1,9 @@
+body{
+    font-family: 'Roboto Slab', serif;
+    background: rgb(175, 101, 175);
+    overflow: hidden;
+}
+
+.border-thickness{
+    border-width: .75em !important;
+}

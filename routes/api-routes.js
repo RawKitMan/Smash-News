@@ -1,23 +1,22 @@
-var express = require("express");
-var axios = require("axios");
-var cheerio = require("cheerio");
-var db = require("../models");
+let express = require("express");
+let axios = require("axios");
+let cheerio = require("cheerio");
+let db = require("../models");
 
-var router = express.Router();
+let router = express.Router();
 
 router.get('/', function (req, res, next) {
   db.Article.find(function (err, content) {
-    console.log(content);
     //Render the articles to the index handlebars page
-    res.render('index', { title: 'Smash News', dbArticles: content });
+    res.render('index', {dbArticles: content });
   });
 });
 
 router.get("/scrape", function (req, res) {
-  // First, we grab the body of the html with axios
+  // First, we grab articles from Kotaky
   axios.get("https://kotaku.com/tag/smash-bros").then(function (response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
-    var $ = cheerio.load(response.data);
+    let $ = cheerio.load(response.data);
     let counter = 0;
     let length = $(".item__text").length
     // Now, we grab every article, and do the following:
@@ -28,11 +27,15 @@ router.get("/scrape", function (req, res) {
       // Add the title, summary, and href of every link, and save them as properties of the result object
       result.title = $(this).children("h1").children("a").children("div").text();
 
+      result.author = $(this).children(".meta--pe").children(".meta__container").children(".author").children(".js_link").text();
+
       result.summary = $(this).children($(".excerpt")).children("p").text();
 
       result.article_url = $(this).children("h1").children("a").attr("href");
 
-      result.notes = ""
+      result.notes = "";
+
+      console.log(result);
 
       // Create a new Article using the `result` object built from scraping
       db.Article.create(result)

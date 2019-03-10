@@ -12,7 +12,12 @@ var ArticleSchema = new Schema({
     required: true,
     unique: true
   },
-  // Want to store the article's URL as a string and make sure there are NO COPIES in the database
+
+  //Author of the article
+  author: {
+    type: String,
+  },
+  //Contains the image associated with the article. If there's no image, then we don't save it
   article_url: {
     type: String,
     required: true,

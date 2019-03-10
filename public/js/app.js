@@ -1,6 +1,4 @@
 $(function () {
-
-    console.log("LOADING CONTENT")
     //Scrape for news articles
     $("#scrape").on("click", function (e) {
         e.preventDefault()
@@ -9,7 +7,6 @@ $(function () {
             url: "/scrape"
         })
             .then(function (data) {
-                console.log(data)
                 if (data) {
                     console.log("Scrape Complete");
 
@@ -71,26 +68,26 @@ $(function () {
             method: "GET",
             url: "/articles/" + thisId,
             success: function (data) {
+                $("#notes").addClass("shadow mt-5 mb-5 bg-white rounded h-50 form-group")
                 $("#notes").append("<h2>" + data.title + "</h2>");
                 // An input to enter a new title
-                $("#notes").append("<input id='title' name='title' >");
+                $("#notes").append("<input id='title' class = 'form-control' name='title' placeholder='Enter Note Title>");
                 // A textarea to add a new note body
-                $("#notes").append("<textarea id='body' name='body'></textarea>");
+                $("#notes").append("<textarea id='body' class = 'form-control mt-3' name='body' rows = '7' placeholder = 'Enter Note'></textarea>");
                 // A button to submit a new note, with the id of the article saved to it
 
                 // If there's a note in the article
                 if (data.note) {
                     //If a note exists already, we want to update, not post a new note
-                    $("#notes").append("<button data-id='" + data.note._id + "' id='update-note'>Update</button>");
+                    $("#notes").append("<button data-id='" + data.note._id + "' id='update-note' class='mt-2 btn btn-success mb-2'>Update</button>");
                     // Place the title of the note in the title input
                     $("#title").val(data.note.title);
                     // Place the body of the note in the body textarea
                     $("#body").val(data.note.body);
                 }
                 else {
-                    $("#notes").append("<button data-id='" + data._id + "' id='enter-note'>Submit Note</button>");
+                    $("#notes").append("<button data-id='" + data._id + "' id='enter-note' class='mt-2 btn btn-success mb-2'>Submit Note</button>");
                 }
-                location.reload();
             }
         });
     });
@@ -133,6 +130,5 @@ $(function () {
         $("#title").val("");
         $("#body").val("");
     });
-
 
 });
