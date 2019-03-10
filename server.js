@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 //Server ports we want to access
-let PORT = 3000;
+let PORT = process.env.PORT || 3000;
 
 //Set up Express
 
