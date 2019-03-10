@@ -8,8 +8,8 @@ var router = express.Router();
 router.get('/', function (req, res, next) {
   db.Article.find(function (err, content) {
     console.log(content);
+    //Render the articles to the index handlebars page
     res.render('index', { title: 'Smash News', dbArticles: content });
-
   });
 });
 
@@ -18,7 +18,8 @@ router.get("/scrape", function (req, res) {
   axios.get("https://kotaku.com/tag/smash-bros").then(function (response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
-
+    let counter = 0;
+    let length = $(".item__text").length
     // Now, we grab every article, and do the following:
     $(".item__text").each(function (i, element) {
       // Save an empty result object
@@ -33,31 +34,38 @@ router.get("/scrape", function (req, res) {
 
       result.notes = ""
 
-      console.log(result);
       // Create a new Article using the `result` object built from scraping
       db.Article.create(result)
         .then(function (dbArticle) {
-          // View the added result in the console
-          console.log(dbArticle);
+          //If the article is successfully added to the database, increase the counter
+          counter++;
+
+          //Once all the articles are put in, send a response saying the job is done.
+          if(counter >= length){
+            res.send('Success')
+          }
 
         })
         .catch(function (err) {
-          // If an error occurred, log it
-          console.log(err);
+          //We don't want the create to stop if an article doesn't come through for some reason. Let's move on to the next.
+
+          //Increase the counter even if the article isn't passed
+          counter++;
+          //Once all the valid articles are put into the database, send a response saying the job is done.
+          if(counter >= length){
+            res.send('Success')
+          }
         });
-
     });
-
-    // Send a message to the client
   });
 });
 
 //Get individual articles by the objectId and populate it with it's note
 router.get("/articles/:id", function (req, res) {
 
-  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+  //Find an article with it's associated id
   db.Article.findOne({ _id: req.params.id })
-    // ..and populate all of the notes associated with it
+    //Populate all of the notes associated with it
     .populate("note")
     .then(function (dbArticle) {
       // If we were able to successfully find an Article with the given id, send it back to the client
@@ -74,12 +82,11 @@ router.post("/articles/:id", function (req, res) {
   // Create a new note and pass the req.body to the entry
   db.Note.create(req.body)
     .then(function (dbNote) {
-      // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-      // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
-      // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
+      //Find the article with the associated ID and then insert the inserted Notes's ObjectId into the Article object.
+      //{new:true} has it so we see the new article note
       return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true })
         .then(function () {
-          console.log("Note saved");
+          res.send("Success")
         })
         .catch(function (err) {
           res.json(err);
@@ -96,6 +103,8 @@ router.post("/articles/:id", function (req, res) {
 });
 
 router.put("/articles/:id", function (req, res) {
+
+  //Find the article with the associated id and set the saved property to true or false, depending on if the user saves or unsaves the article
   db.Article.findOneAndUpdate({
     _id: req.params.id
   },
@@ -106,10 +115,12 @@ router.put("/articles/:id", function (req, res) {
       new: true
     })
     .then(function () {
-      console.log("Update Complete")
+      res.send("Success")
     })
 });
 
+
+//Route to update a note if one currently exists
 router.put("/note/:id", function (req, res) {
   db.Note.findOneAndUpdate({
     _id: req.params.id
@@ -122,24 +133,42 @@ router.put("/note/:id", function (req, res) {
       new: true
     })
     .then(function () {
-      console.log("Update Complete");
+      res.send("success");
     })
 });
 
+
+//The route to delete an article based on it's ID.
 router.delete("/articles/:id", function (req, res) {
 
   db.Article.findOne({
     _id: req.params.id
   })
     .then(function (dbArticle) {
-      console.log(dbArticle);
+      //If there is a note associated with the deleted article, we want to delete it as well.
       if (dbArticle.note) {
         let noteId = dbArticle.note;
-        console.log(noteId);
-        db.Note.findByIdAndDelete(noteId);
-      }
-      db.Article.findByIdAndDelete(req.params.id);
+        db.Note.findByIdAndDelete(noteId)
+          .then(data => {
+            res.send("Success")
+          })
+          .catch(err => {
+            res.send(err)
+          })
+
+      };
+      
+      //Find the article and get rid of it.
+      db.Article.findByIdAndDelete(req.params.id)
+        .then(data => {
+          res.send("Success")
+          console.log(data)
+        })
+        .catch(err => {
+          console.log(err)
+        });
     });
-  });
+});
+
 //Export to the server.
 module.exports = router;

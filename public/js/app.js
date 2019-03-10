@@ -1,31 +1,36 @@
 $(function () {
 
-    //Pull up any saved articles when the page
-
-    $("#scrape").on("click", function () {
+    console.log("LOADING CONTENT")
+    //Scrape for news articles
+    $("#scrape").on("click", function (e) {
+        e.preventDefault()
         $.ajax({
             method: "GET",
             url: "/scrape"
         })
             .then(function (data) {
+                console.log(data)
                 if (data) {
                     console.log("Scrape Complete");
+
                 }
                 else {
                     console.log("No articles found");
                 }
+
+                location.reload();
             });
     });
 
     $(document).on("click", "#remove-unsaved", function () {
 
-        console.log($(this).attr("data-id"));
         $.ajax({
             method: "DELETE",
             url: "/articles/" + $(this).attr("data-id"),
         }).then(function () {
-            console.log("Delete complete");
-        })
+            // console.log("Delete complete");
+            location.reload();
+        });
 
     });
 
@@ -39,6 +44,7 @@ $(function () {
             }
         }).then(function () {
             console.log("Update Complete")
+            location.reload();
         })
     });
 
@@ -51,6 +57,7 @@ $(function () {
             }
         }).then(function () {
             console.log("Update Complete")
+            location.reload();
         });
     });
 
@@ -64,7 +71,6 @@ $(function () {
             method: "GET",
             url: "/articles/" + thisId,
             success: function (data) {
-                console.log(data);
                 $("#notes").append("<h2>" + data.title + "</h2>");
                 // An input to enter a new title
                 $("#notes").append("<input id='title' name='title' >");
@@ -84,6 +90,7 @@ $(function () {
                 else {
                     $("#notes").append("<button data-id='" + data._id + "' id='enter-note'>Submit Note</button>");
                 }
+                location.reload();
             }
         });
     });
@@ -99,8 +106,8 @@ $(function () {
             }
         })
             .then(function (data) {
-                console.log(data);
                 $("#notes").empty();
+                location.reload();
             })
 
         $("#title").val("");
@@ -126,5 +133,6 @@ $(function () {
         $("#title").val("");
         $("#body").val("");
     });
+
 
 });
