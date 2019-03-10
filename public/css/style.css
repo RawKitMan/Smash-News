@@ -1,9 +1,34 @@
 body{
     font-family: 'Roboto Slab', serif;
     background: rgb(175, 101, 175);
-    overflow: hidden;
+    overflow-x: hidden;
 }
+
+.icon-size{
+    height: 125px;
+    width: 125px;
+}
+
+.button-sizing{
+    width: 10em;
+    height: 5em;
+}
+
+.container-positioning{
+    margin-top: 200px;
+}
+
+.image-border{
+    border-width: .75em !important;
+}
+
+.image-sizing{
+    height: 20em;
+    width: 21em;
+}
+
 
 .border-thickness{
     border-width: .75em !important;
 }
+

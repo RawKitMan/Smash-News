@@ -68,10 +68,10 @@ $(function () {
             method: "GET",
             url: "/articles/" + thisId,
             success: function (data) {
-                $("#notes").addClass("shadow mt-5 mb-5 bg-white rounded h-50 form-group")
-                $("#notes").append("<h2>" + data.title + "</h2>");
+                $("#notes").addClass("shadow mt-5 mb-5 bg-white rounded h-75")
+                $("#notes").append("<h4>" + data.title + "</h4>");
                 // An input to enter a new title
-                $("#notes").append("<input id='title' class = 'form-control' name='title' placeholder='Enter Note Title>");
+                $("#notes").append("<input type= 'text' id='title' class='form-control mt-3' name='title' placeholder='Enter Note Title'>");
                 // A textarea to add a new note body
                 $("#notes").append("<textarea id='body' class = 'form-control mt-3' name='body' rows = '7' placeholder = 'Enter Note'></textarea>");
                 // A button to submit a new note, with the id of the article saved to it

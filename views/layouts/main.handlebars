@@ -36,33 +36,35 @@
 <body>
 
     <!--Sexy nav bar is sexy-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top border-bottom border-thickness border-dark bg-light">
 
         <ul class="nav navbar-nav ml-auto mr-2">
-            <li class="nav-item"><img src="/images/SSBicon.png" alt="Smash Brothers Logo"></li>
+            <li class="nav-item"><img src="/images/SSBicon.png" alt="Smash Brothers Logo" class="icon-size"></li>
         </ul>
         <ul class="nav navbar-nav ml-2 mr-2">
             <li class="nav-item">
-                <a href="https://fontmeme.com/super-smash-bros-font/"><img
-                        src="https://fontmeme.com/permalink/190310/012ff0b4bb3bdc75b30f7ef808c8744a.png"
-                        alt="super-smash-bros-font" border="0">
-                </a>
+                <img src="https://fontmeme.com/permalink/190310/012ff0b4bb3bdc75b30f7ef808c8744a.png"
+                    alt="super-smash-bros-font" border="0">
             </li>
         </ul>
-
         <ul class="navbar-nav ml-2 mr-auto">
             <li class="nav-item active">
-                <button type="button" class="nav-link" id="scrape">Scrape Articles</a>
+                <button type="button" class="btn btn-danger button-sizing shadow" id="scrape">Scrape Articles</a>
             </li>
         </ul>
 
     </nav>
 
-    <div class="row ml-3">
-        {{{body}}}
+    <div class="container container-positioning">
+        <div class="row d-flex justify-content-center mt-4 mb-3">
+            <img class="image-fluid image-sizing border border-primary image-border rounded"
+                src="/images/SSBcharacters.jpg" alt="Super Smash Bros Characters">
+        </div>
 
-        <div id="notes" class="offset-md-1 col-md-4"></div>
+        <div class="row ml-3">            
+            {{{body}}}
+            <div id="notes" class="offset-md-1 col-md-4"></div>
+        </div>
     </div>
 
 </body>

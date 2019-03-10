@@ -6,16 +6,17 @@
             <h5>By {{author}}</h5>
             <p>{{summary}}</p>
             <button type="button" class = "btn btn-primary btn-sm mb-4"><a href={{article_url}} class = "text-light" target="_blank">Article Link</a></button>
-            <button id="note-btn" data-id={{_id}} type="button" class="btn btn-primary btn-sm mb-4">Add Note</button>
+            <button id="note-btn" data-id={{_id}} type="button" class="btn btn-primary btn-sm mb-4 shadow">Add Note</button>
             {{#if saved}}
-                <button id="unsave-btn" data-id={{_id}} type="button" class="btn btn-danger btn-sm mb-4">Unsave Article</button>
+                <button id="unsave-btn" data-id={{_id}} type="button" class="btn btn-danger btn-sm mb-4 shadow">Unsave Article</button>
             {{else}}
-                <button id="save-btn" data-id={{_id}} type="button" class="btn btn-danger btn-sm mb-4">Save Article</button>
-                <button id="remove-unsaved" data-id={{_id}} type="button" class="btn btn-danger btn-sm mb-4">Remove</button>
+                <button id="save-btn" data-id={{_id}} type="button" class="btn btn-danger btn-sm mb-4 shadow">Save Article</button>
+                <button id="remove-unsaved" data-id={{_id}} type="button" class="btn btn-danger btn-sm mb-4 shadow">Remove</button>
         {{/if}}        
     </div>
     {{else}}
-        <h3>Click the 'Scrape Articles' button to pull up articles</h3>
+        <h3>Click the 'Scrape Articles' button to pull up articles.</h3></br>
+        <p class="text-center">All articles from Kotaku</p>
     {{/each}}
 
 </div>
