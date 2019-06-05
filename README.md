@@ -19,13 +19,18 @@ Before scraping:
 
 After scraping:
 
+
 ![Screenshot (30)](https://user-images.githubusercontent.com/41662298/55498474-9580b000-55f8-11e9-8fc9-b23ca4c21294.png)
 
 Adding notes to a specific article (can be pulled up and changed after if the article is saved):
+
+
 ![Screenshot (31)](https://user-images.githubusercontent.com/41662298/55498484-974a7380-55f8-11e9-8062-1079a6db0899.png)
 
 
 Saved article only:
+
+
 ![Screenshot (32)](https://user-images.githubusercontent.com/41662298/55498498-9dd8eb00-55f8-11e9-83bd-70e2d60b8c9e.png)
 
 
